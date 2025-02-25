@@ -1,1 +1,5 @@
+echo '⚠️  Check for commit message errors... ⚠️'
+
 npx --no -- commitlint --edit ${1}
+
+echo '✅ Commit message done ✅'
