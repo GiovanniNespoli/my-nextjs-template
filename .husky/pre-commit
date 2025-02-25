@@ -1,4 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
+echo '⚠️  Check for linting errors... ⚠️'
+npm run check:fix || 
+(echo '🚫 Linting errors or tests failed. Please fix them before commiting. 🚫' && exit 1)
 
-pnpm run lint
+echo '✅ Linting done ✅'
