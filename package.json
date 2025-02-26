@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prepare": "husky",
     "check": "eslint --ext .ts",
-    "check:fix": "eslint --ext .ts --fix"
+    "check:fix": "eslint src --ext .ts --fix"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.3",
