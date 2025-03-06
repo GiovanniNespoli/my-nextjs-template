@@ -1,7 +1,10 @@
 "use server";
 
 import { UsersApiRoutes } from "@/app/core/services/user/routes";
-import { IUserCreateData } from "@/app/(modules)/(private)/user/interface/IUser";
+import {
+  IUser,
+  IUserCreateData,
+} from "@/app/(modules)/(private)/user/interface/IUser";
 import { api } from "@/app/api/api";
 import { revalidateTag } from "next/cache";
 
@@ -15,6 +18,22 @@ export async function GET() {
 
   const data = await response.json();
   return data;
+}
+
+export async function useGetUsersById(
+  userId?: string
+): Promise<IUser | undefined> {
+  if (userId) {
+    const response = await fetch(`${api}${UsersApiRoutes.USERS}/${userId}`);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar os dados");
+    }
+
+    const data = (await response.json()) as IUser;
+    return data;
+  } else {
+    return undefined;
+  }
 }
 
 export async function DELETE(userId: string) {
