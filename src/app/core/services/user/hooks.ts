@@ -1,9 +1,9 @@
 "use server";
 
+import { UsersApiRoutes } from "@/app/core/services/user/routes";
+import { IUserCreateData } from "@/app/(modules)/(private)/user/interface/IUser";
 import { api } from "@/app/api/api";
-import { UsersApiRoutes } from "./routes";
 import { revalidateTag } from "next/cache";
-import { IUserCreateData } from "../interface/IUser";
 
 export async function GET() {
   const response = await fetch(`${api}${UsersApiRoutes.USERS}`, {

@@ -12,8 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DELETE } from "../api/apiFunctions";
 import { IUser } from "../interface/IUser";
+import { DELETE } from "@/app/core/services/user/hooks";
 
 export const tableColumns: ColumnDef<IUser>[] = [
   {

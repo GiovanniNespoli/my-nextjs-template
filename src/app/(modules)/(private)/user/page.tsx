@@ -1,9 +1,9 @@
 import { DataTable } from "@/components/tanStack-table/data-table";
 import { Metadata } from "next";
 import { tableColumns } from "./components/tableColumns";
-import { GET } from "./api/apiFunctions";
 import { IUser } from "./interface/IUser";
 import CreateUserButton from "./components/create-user-button";
+import { GET } from "@/app/core/services/user/hooks";
 
 export const metadata: Metadata = {
   title: "Lista",
