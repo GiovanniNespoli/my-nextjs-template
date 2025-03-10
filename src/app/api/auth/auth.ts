@@ -29,6 +29,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             body: JSON.stringify({ email, password }),
           });
+
+          if (!response.ok) {
+            throw new Error("Erro ao buscar os dados");
+          }
+
           const data = await response.json();
           return data;
         } catch (error) {
@@ -38,6 +43,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    signIn: async ({ user }) => {
+      if (user.token) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     jwt: async ({ token, user, trigger, session }) => {
       if (user) {
         const userWithToken = user as UserWithToken;
@@ -64,5 +76,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+  },
+  secret: process.env.AUTH_SECRET,
+  pages: {
+    signIn: "/",
   },
 });
