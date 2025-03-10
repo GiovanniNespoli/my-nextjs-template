@@ -1,6 +1,12 @@
-import NextAuth from "next-auth";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { api } from "../api";
+import { jwtDecode } from "jwt-decode";
+
+interface UserWithToken extends User {
+  token: string;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -24,7 +30,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             body: JSON.stringify({ email, password }),
           });
           const data = await response.json();
-          console.log("data", data);
           return data;
         } catch (error) {
           console.log(error);
@@ -32,4 +37,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    jwt: async ({ token, user, trigger, session }) => {
+      if (user) {
+        const userWithToken = user as UserWithToken;
+        const userToken = jwtDecode(userWithToken.token) as typeof token.user;
+
+        token.id = userWithToken.id;
+        token.token = userWithToken.token;
+        token.user = userToken;
+      }
+
+      if (trigger === "update" && session?.info) {
+        // @ts-expect-error
+        token.user = { ...token.user, ...session.info };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        // @ts-expect-error
+        session.token = token.token as string;
+        // @ts-expect-error
+        session.user = token.user;
+      }
+
+      return session;
+    },
+  },
 });
