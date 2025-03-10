@@ -8,7 +8,7 @@ import {
 import { api } from "@/app/api/api";
 import { revalidateTag } from "next/cache";
 
-export async function GET() {
+export async function useGetUsers() {
   const response = await fetch(`${api}${UsersApiRoutes.USERS}`, {
     next: { tags: ["collection"] },
   });
@@ -36,9 +36,9 @@ export async function useGetUsersById(
   }
 }
 
-export async function DELETE(userId: string) {
+export async function useDeleteUsers(userId: string) {
   const response = await fetch(`${api}${UsersApiRoutes.USERS}/${userId}`, {
-    method: "DELETE",
+    method: "useDeleteUsers",
   });
 
   if (!response.ok) {
@@ -48,7 +48,7 @@ export async function DELETE(userId: string) {
   revalidateTag("collection");
 }
 
-export async function CREATE(data: IUserCreateData) {
+export async function useCreateUsers(data: IUserCreateData) {
   const response = await fetch(`${api}${UsersApiRoutes.USERS}`, {
     method: "POST",
     headers: {

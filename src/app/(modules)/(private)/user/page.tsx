@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { IUser } from "./interface/IUser";
-import { GET } from "@/app/core/services/user/hooks";
+import { useGetUsers } from "@/app/core/services/user/hooks";
 import TableWithFilter from "./components/table-with-filter";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 async function getUsers(): Promise<IUser[]> {
-  return await GET();
+  return await useGetUsers();
 }
 
 export default async function UserList() {

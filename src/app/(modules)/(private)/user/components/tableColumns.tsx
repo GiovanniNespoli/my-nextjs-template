@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "../interface/IUser";
-import { DELETE } from "@/app/core/services/user/hooks";
+import { useDeleteUsers } from "@/app/core/services/user/hooks";
 
 export const tableColumns: ColumnDef<IUser>[] = [
   {
@@ -45,7 +45,7 @@ export const tableColumns: ColumnDef<IUser>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                DELETE(user.id);
+                useDeleteUsers(user.id);
               }}
             >
               Delete user
