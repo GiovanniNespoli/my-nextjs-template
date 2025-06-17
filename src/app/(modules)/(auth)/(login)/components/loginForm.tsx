@@ -1,8 +1,8 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
@@ -22,7 +22,9 @@ export default function LoginForm() {
       password,
     });
 
-    if (signInUser?.ok) push("/user");
+    console.log(signInUser);
+
+    if (!signInUser?.error) push("/user");
   }
 
   return (

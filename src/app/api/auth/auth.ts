@@ -1,12 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { api } from "../api";
-import { jwtDecode } from "jwt-decode";
-
-interface UserWithToken extends User {
-  token: string;
-}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -20,9 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const { email, password } = credentials;
 
-          console.log("credentials", email, password);
-
-          const response = await fetch(`${api}/api/sessions`, {
+          const response = await api("/sessions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -31,54 +23,59 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
 
           if (!response.ok) {
-            throw new Error("Erro ao buscar os dados");
+            console.error(
+              "Erro na API externa /sessions",
+              await response.text()
+            );
+            return null;
           }
 
           const data = await response.json();
-          return data;
+
+          if (!data?.user?.id) {
+            return null;
+          }
+
+          return {
+            id: data.user.id,
+            name: data.user.name,
+            email: data.user.email,
+            role: data.user.role,
+            avatar: data.user.avatar,
+            created_at: data.user.created_at,
+            updated_at: data.user.updated_at,
+            token: data.token,
+          };
         } catch (error) {
-          console.log(error);
+          console.error("Erro no authorize:", error);
+          return null;
         }
       },
     }),
   ],
   callbacks: {
-    signIn: async ({ user }) => {
-      if (user.token) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    jwt: async ({ token, user, trigger, session }) => {
+    // * ✅ Este callback é chamado toda vez que o JWT é criado ou atualizado
+    // * ✅ Na primeira vez (após login), o "user" estará preenchido
+    // * ✅ Nas próximas vezes, o "user" será undefined, e só o token será processado
+    async jwt({ token, user }) {
       if (user) {
-        const userWithToken = user as UserWithToken;
-        const userToken = jwtDecode(userWithToken.token) as typeof token.user;
-
-        token.id = userWithToken.id;
-        token.token = userWithToken.token;
-        token.user = userToken;
-      }
-
-      if (trigger === "update" && session?.info) {
-        // @ts-expect-error
-        token.user = { ...token.user, ...session.info };
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.role = user.role;
       }
       return token;
     },
+    // * ✅ Este callback é chamado toda vez que alguém chama "getSession()" ou "useSession()"
+    // * ✅ Ele permite adicionar ao objeto "session" dados que vieram do JWT (token)
     async session({ session, token }) {
-      if (token) {
-        // @ts-expect-error
-        session.token = token.token as string;
-        // @ts-expect-error
-        session.user = token.user;
-      }
+      session.user.id = token.id as string;
+      session.user.email = token.email as string;
+      session.user.name = token.name as string;
+      session.user.role = token.role as string;
 
       return session;
     },
   },
   secret: process.env.AUTH_SECRET,
-  pages: {
-    signIn: "/",
-  },
 });
