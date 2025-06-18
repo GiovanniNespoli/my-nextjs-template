@@ -23,18 +23,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
 
           if (!response.ok) {
-            console.error(
-              "Erro na API externa /sessions",
-              await response.text()
-            );
-            return null;
+            throw new Error("Email ou senha incorretos!");
           }
 
           const data = await response.json();
-
-          if (!data?.user?.id) {
-            return null;
-          }
 
           return {
             id: data.user.id,

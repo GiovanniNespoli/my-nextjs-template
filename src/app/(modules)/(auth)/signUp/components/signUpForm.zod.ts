@@ -5,7 +5,7 @@ import { z } from "zod";
 const signUpFormSchema = z
   .object({
     name: z.string().nonempty("O campo nome é obrigatório"),
-    email: z.string().nonempty("O campo email é obrigatório"),
+    email: z.string().nonempty("O campo email é obrigatório").email("Dever ser um email válido"),
     password: z
       .string()
       .nonempty("A senha é obrigatária")

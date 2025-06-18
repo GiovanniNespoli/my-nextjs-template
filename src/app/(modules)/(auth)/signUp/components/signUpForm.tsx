@@ -100,7 +100,7 @@ export default function SignUpForm() {
       <div>
         <Input
           className="text-zinc-950 w-full rounded-[4px]"
-          type="text"
+          type="password"
           placeholder="Senha"
           {...register("password")}
           disabled={isLoading}
@@ -116,7 +116,7 @@ export default function SignUpForm() {
       <div>
         <Input
           className="text-zinc-950 w-full rounded-[4px]"
-          type="text"
+          type="password"
           placeholder="Confirme a senha"
           {...register("password_confirmation")}
           disabled={isLoading}
