@@ -8,7 +8,7 @@ export default function UserLayout({
   return (
     <section className="w-dvw h-dvh overflow-hidden animate-fadeInUp">
       <div className="w-full h-24">
-        <Header userName="Giovanni Nespoli" />
+        <Header />
       </div>
       <div className="w-full h-[calc(100%-6rem)]">{children}</div>
     </section>

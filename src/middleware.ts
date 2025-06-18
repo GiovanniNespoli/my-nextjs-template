@@ -1,32 +1,26 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function middleware(request: NextRequest) {
-  console.log("middleware muhahah");
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const publicPaths = ["/", "/signUp"];
 
-  // const token = request.cookies.get("token")?.value;
-  // const { pathname } = request.nextUrl;
+  const isPublicPath = publicPaths.find((path) => pathname === path);
+  if (isPublicPath) {
+    return NextResponse.next();
+  }
+  const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+  });
+  if (!token) {
+    return NextResponse.redirect("http://localhost:3000/");
+  }
 
-  // const isAuthenticated = !!token;
-
-  // if (!isAuthenticated && pathname !== "/login") {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
-
-  // Se o usuário está logado e tenta acessar /login, redireciona para /home
-  // if (pathname === "/login") {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
-
-  // Se nada disso se aplicar, segue normalmente
-  return NextResponse.next();
+  return NextResponse.next(); 
 }
 
-// Configurando em quais rotas o middleware roda
 export const config = {
-  // Aqui estamos aplicando o middleware a todas as rotas, exceto:
-  // - _next (arquivos internos do Next)
-  // - arquivos estáticos (favicon.ico, imagens, etc.)
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className={`${dm_sans.variable}`} lang="pt">
-      <body className={`bg-zinc-200 text-zinc-50 antialiased`}>
+      <body className={`bg-zinc-200 text-zinc-50 antialiased overflow-hidden`}>
         <ApplicationProviders>{children}</ApplicationProviders>
       </body>
     </html>
