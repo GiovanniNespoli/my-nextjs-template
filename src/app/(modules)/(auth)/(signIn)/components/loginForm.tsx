@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const { push } = useRouter();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -30,7 +32,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-4/6 flex flex-col justify-between "
+      className="h-4/6 w-5/6 flex flex-col justify-between"
     >
       <p className="text-zinc-950 text-4xl font-(famlily-name: --sans)">
         <b>Bem vindo</b> - Login
@@ -52,11 +54,15 @@ export default function LoginForm() {
           Esqueci a senha
         </p>
         <p className="text-zinc-950">
-          Não possui uma conta?{" "}
-          <b className="underline cursor-pointer">cadastrar</b>
+          Não possui uma conta?
+          <b
+            onClick={() => router.push("/signUp")}
+            className="underline cursor-pointer hover:text-zinc-600"
+          >
+            cadastrar
+          </b>
         </p>
       </div>
-      {/* <LoginButton navigation={"/user"} /> */}
       <Button type="submit" className="bg-blue-600">
         Login
       </Button>

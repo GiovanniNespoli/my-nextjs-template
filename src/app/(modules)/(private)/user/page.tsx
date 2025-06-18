@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { IUser } from "./interface/IUser";
-import { useGetUsers } from "@/app/core/services/user/hooks";
+import { useGetUsers } from "@/app/core/services/user/services";
 import { auth } from "@/app/api/auth/auth";
 import { SignOut } from "./components/signout-button";
 

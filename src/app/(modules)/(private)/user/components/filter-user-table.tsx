@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUsersById } from "@/app/core/services/user/hooks";
+import { useGetUsersById } from "@/app/core/services/user/services";
 import { Input } from "@/components/ui/input";
 import { useCallback } from "react";
 import { IUser } from "../interface/IUser";

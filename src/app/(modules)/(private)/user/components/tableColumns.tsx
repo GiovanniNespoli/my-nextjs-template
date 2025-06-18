@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "../interface/IUser";
-import { useDeleteUsers } from "@/app/core/services/user/hooks";
+import { useDeleteUsers } from "@/app/core/services/user/services";
 
 export const tableColumns: ColumnDef<IUser>[] = [
   {
