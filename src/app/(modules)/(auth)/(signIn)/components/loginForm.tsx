@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
@@ -37,7 +37,18 @@ export default function LoginForm() {
         return toast.error("Email ou senha incorretos!");
       }
 
-      return push("/user");
+      const session = await getSession();
+
+      const role = session?.user?.role;
+
+      switch (role) {
+        case "ADMIN":
+          return push("/user");
+        case "OPERATOR":
+          return push("/user/profile");
+        default:
+          return push("/");
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

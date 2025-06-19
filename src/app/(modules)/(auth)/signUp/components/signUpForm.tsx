@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { SignUpFormData, signUpFormResolver } from "./signUpForm.zod";
 import { useState } from "react";
-import { createUsers } from "@/app/core/services/user/services";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { CreateUsers } from "@/app/core/services/user/services";
 
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,7 +29,7 @@ export default function SignUpForm() {
   }) => {
     try {
       setIsLoading(true);
-      const newUser = await createUsers({
+      const newUser = await CreateUsers({
         name,
         email,
         password,

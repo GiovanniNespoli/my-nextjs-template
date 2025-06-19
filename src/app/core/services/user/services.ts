@@ -9,7 +9,7 @@ import { api } from "@/app/api/api";
 import { revalidateTag } from "next/cache";
 
 // * Hook server-side para buscar a lista de usuários
-export async function useGetUsers() {
+export async function GetUsers() {
   // * Faz a requisição GET para a rota de usuários da API
   // * Inclui a opção `next: { tags: ["collection"] }` para o Next.js conseguir revalidar o cache por tag depois
   const response = await api(UsersApiRoutes.USERS, {
@@ -29,7 +29,7 @@ export async function useGetUsers() {
   return data;
 }
 
-export async function getUsersById(
+export async function GetUsersById(
   userId?: string
 ): Promise<IUser | undefined> {
   if (userId) {
@@ -46,7 +46,7 @@ export async function getUsersById(
   }
 }
 
-export async function deleteUsers(userId: string) {
+export async function DeleteUsers(userId: string) {
   const response = await api(`${UsersApiRoutes.USERS}/${userId}`, {
     method: "DELETE",
   });
@@ -58,7 +58,7 @@ export async function deleteUsers(userId: string) {
   revalidateTag("collection");
 }
 
-export async function createUsers(data: IUserCreateData) {
+export async function CreateUsers(data: IUserCreateData) {
   const response = await api(UsersApiRoutes.USERS, {
     method: "POST",
     headers: {

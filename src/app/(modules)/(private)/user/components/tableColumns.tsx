@@ -13,7 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "../interface/IUser";
-import { useDeleteUsers } from "@/app/core/services/user/services";
+import ModalStyled from "@/components/modal-styled";
+import { DeleteUsers } from "@/app/core/services/user/services";
+import { useCallback } from "react";
+import { toast } from "sonner";
 
 export const tableColumns: ColumnDef<IUser>[] = [
   {
@@ -25,13 +28,26 @@ export const tableColumns: ColumnDef<IUser>[] = [
     header: "Email",
   },
   {
-    accessorKey: "phone",
-    header: "Phone",
+    accessorKey: "role",
+    header: "Cargo",
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const user = row.original;
+
+      const HandleDeleteUser = useCallback(async () => {
+        try {
+          await DeleteUsers(user.id);
+          toast.success("Usuário deletado com sucesso!");
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          } else {
+            toast.error("Erro desconhecido");
+          }
+        }
+      }, []);
 
       return (
         <DropdownMenu>
@@ -43,14 +59,31 @@ export const tableColumns: ColumnDef<IUser>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => {
-                useDeleteUsers(user.id);
-              }}
-            >
-              Delete user
+            <DropdownMenuItem asChild>
+              <ModalStyled
+                modalTitle="Deletar usuário"
+                triggerElement={
+                  <>
+                    <p className="cursor-default gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors">
+                      Deletar
+                    </p>
+                  </>
+                }
+                modalContentElement={
+                  <>
+                    <strong className="text-zinc-800">
+                      Tem certeza que deseja excluir este usuário?
+                    </strong>
+                    <p className="text-zinc-800">
+                      Essa ação é irreversível e removerá permanentemente o
+                      usuário do sistema.
+                    </p>
+                  </>
+                }
+                action={() => HandleDeleteUser()}
+              />
             </DropdownMenuItem>
-            <DropdownMenuItem>Edit user</DropdownMenuItem>
+            <DropdownMenuItem>Editar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

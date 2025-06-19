@@ -13,4 +13,9 @@ interface IUserCreateData {
   role: string;
 }
 
+export enum UserRoleEnum {
+  ADMIN = "ADMIN",
+  OPERATOR = "OPERATOR",
+}
+
 export type { IUser, IUserCreateData };

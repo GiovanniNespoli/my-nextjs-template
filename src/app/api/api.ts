@@ -11,8 +11,22 @@ export function api(path: string, init?: RequestInit) {
   // * E constrói a URL final usando o construtor URL (que cuida de barras duplicadas, etc)
   const url = new URL(apiPrefix.concat(path), baseUrl);
 
+  const existingHeaders =
+    init?.headers instanceof Headers
+      ? Object.fromEntries(init.headers.entries())
+      : init?.headers || {};
+
+  const headers = {
+    ...existingHeaders,
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTAzMzE1ODIsImV4cCI6MTc1MDQxNzk4Miwic3ViIjoiOGFmNGVmMjMtYjBmMC00YzZlLTk3MDYtNTQwZWIxY2E1N2U2In0.i0Od2k1glR-1FBJnXTdY1NLxyRBxSE_HFJ0E1jB9Z04`,
+    "Content-Type": "application/json",
+  };
+
   // * Faz a requisição HTTP usando o fetch, passando a URL montada e as configurações opcionais (método, headers, body, etc)
-  return fetch(url, init);
+  return fetch(url, {
+    ...init,
+    headers,
+  });
 }
 
 // ? Faz a requisição usando o fetch nativo do Next.js (server-side)
