@@ -8,15 +8,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 
 interface ModalStyledProps {
   modalTitle: string;
   triggerElement: ReactElement;
-  modalContentElement: ReactElement;
+  modalContentElement: (close: () => void) => ReactNode;
   cancelButton?: ReactElement;
   continueButton?: ReactElement;
-    action: () => void;
+  action?: () => void;
+  hasModalButton?: boolean;
 }
 
 export default function ModalStyled({
@@ -25,10 +26,15 @@ export default function ModalStyled({
   modalTitle,
   cancelButton,
   continueButton,
+  hasModalButton = true,
   action,
 }: ModalStyledProps) {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger>{triggerElement}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -36,15 +42,17 @@ export default function ModalStyled({
             {modalTitle}
           </AlertDialogTitle>
         </AlertDialogHeader>
-        <div>{modalContentElement}</div>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="text-zinc-800">
-            {cancelButton ? cancelButton : <p>Cancelar</p>}
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={action}>
-            {continueButton ? continueButton : <p>Continuar</p>}
-          </AlertDialogAction>
-        </AlertDialogFooter>
+        <div>{modalContentElement(handleClose)}</div>
+        {hasModalButton && (
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-zinc-800">
+              {cancelButton ? cancelButton : <p>Cancelar</p>}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={action}>
+              {continueButton ? continueButton : <p>Continuar</p>}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        )}
       </AlertDialogContent>
     </AlertDialog>
   );

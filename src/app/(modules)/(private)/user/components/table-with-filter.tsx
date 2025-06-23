@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/tanStack-table/data-table";
 import { IUser } from "../interface/IUser";
 import FilterUserTable from "./filter-user-table";
-import { tableColumns } from "./tableColumns";
+import { tableColumns } from "./table-columns";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";

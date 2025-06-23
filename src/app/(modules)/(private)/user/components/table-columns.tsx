@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -17,6 +18,7 @@ import ModalStyled from "@/components/modal-styled";
 import { DeleteUsers } from "@/app/core/services/user/services";
 import { useCallback } from "react";
 import { toast } from "sonner";
+import EditForm from "./EditForm/edit-form";
 
 export const tableColumns: ColumnDef<IUser>[] = [
   {
@@ -57,19 +59,17 @@ export const tableColumns: ColumnDef<IUser>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent className="flex flex-col" align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
               <ModalStyled
                 modalTitle="Deletar usuário"
                 triggerElement={
-                  <>
-                    <p className="cursor-default gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors">
-                      Deletar
-                    </p>
-                  </>
+                  <div className="w-full text-left px-2 py-1.5 hover:bg-slate-100">
+                    Deletar
+                  </div>
                 }
-                modalContentElement={
+                modalContentElement={(_close) => (
                   <>
                     <strong className="text-zinc-800">
                       Tem certeza que deseja excluir este usuário?
@@ -79,11 +79,24 @@ export const tableColumns: ColumnDef<IUser>[] = [
                       usuário do sistema.
                     </p>
                   </>
-                }
+                )}
                 action={() => HandleDeleteUser()}
               />
             </DropdownMenuItem>
-            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <ModalStyled
+                hasModalButton={false}
+                modalTitle="Editar usuário"
+                triggerElement={
+                  <div className="w-full text-left px-2 py-1.5 hover:bg-slate-100">
+                    Editar
+                  </div>
+                }
+                modalContentElement={(close) => (
+                  <EditForm user={row.original} closeModal={close} />
+                )}
+              />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

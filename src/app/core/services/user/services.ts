@@ -4,6 +4,7 @@ import { UsersApiRoutes } from "@/app/core/services/user/routes";
 import {
   IUser,
   IUserCreateData,
+  IUserUpdateData,
 } from "@/app/(modules)/(private)/user/interface/IUser";
 import { api } from "@/app/api/api";
 import { revalidateTag } from "next/cache";
@@ -74,6 +75,29 @@ export async function CreateUsers(data: IUserCreateData) {
     const errorData = await response.json().catch(() => null);
     const errorMessage =
       errorData?.message || `Erro ao criar usuário. Status: ${response.status}`;
+
+    throw new Error(errorMessage);
+  }
+
+  revalidateTag("collection");
+
+  return await response.json();
+}
+
+export async function UpdateUser(userId: string, updateUser: IUserUpdateData) {
+  const response = await api(`${UsersApiRoutes.USERS}/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updateUser),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    const errorMessage =
+      errorData?.message ||
+      `Erro ao autualizar o usuário. Status: ${response.status}`;
 
     throw new Error(errorMessage);
   }

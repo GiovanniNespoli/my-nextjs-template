@@ -3,7 +3,7 @@ interface IUser {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: UserRoleEnum;
 }
 
 interface IUserCreateData {
@@ -13,9 +13,14 @@ interface IUserCreateData {
   role: string;
 }
 
+interface IUserUpdateData {
+  name: string;
+  email: string;
+}
+
 export enum UserRoleEnum {
   ADMIN = "ADMIN",
   OPERATOR = "OPERATOR",
 }
 
-export type { IUser, IUserCreateData };
+export type { IUser, IUserCreateData, IUserUpdateData };

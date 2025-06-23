@@ -39,8 +39,10 @@ export function SelectStyled<T extends FieldValues>({
           onValueChange={field.onChange}
           disabled={disabled}
         >
-          <SelectTrigger>
-            <SelectValue placeholder={triggerPlaceholder} />
+          <SelectTrigger className="text-zinc-700">
+            <SelectValue
+              placeholder={triggerPlaceholder}
+            />
           </SelectTrigger>
           <SelectContent>
             {options.map((option) => (
