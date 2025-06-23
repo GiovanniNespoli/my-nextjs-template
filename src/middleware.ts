@@ -19,8 +19,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect("http://localhost:3000/");
   }
 
-  console.log("token role", token.role);
-
   if (token.role !== UserRoleEnum.ADMIN) {
     const isAdminPath = adminPaths.find((path) => pathname === path);
 

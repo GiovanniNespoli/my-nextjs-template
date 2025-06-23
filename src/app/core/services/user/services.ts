@@ -9,7 +9,9 @@ import { api } from "@/app/api/api";
 import { revalidateTag } from "next/cache";
 
 // * Hook server-side para buscar a lista de usuários
-export async function GetUsers() {
+export async function GetUsers(): Promise<IUser[] | []> {
+  console.log("entrou na função");
+
   // * Faz a requisição GET para a rota de usuários da API
   // * Inclui a opção `next: { tags: ["collection"] }` para o Next.js conseguir revalidar o cache por tag depois
   const response = await api(UsersApiRoutes.USERS, {
@@ -19,7 +21,8 @@ export async function GetUsers() {
   // * Verifica se a resposta da API foi bem-sucedida
   // * Se não for, lança um erro que pode ser tratado pela interface ou pelo servidor
   if (!response.ok) {
-    throw new Error("Erro ao buscar os dados");
+    const data = await response.json();
+    throw new Error(data.message);
   }
 
   // * Converte a resposta da API de JSON para objeto JavaScript

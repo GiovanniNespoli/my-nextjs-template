@@ -1,7 +1,8 @@
 import { env } from "@/env";
+import { auth } from "./auth/auth";
 
 // * Função utilitária centralizada para fazer requisições HTTP para a API
-export function api(path: string, init?: RequestInit) {
+export async function api(path: string, init?: RequestInit) {
   const baseUrl = env?.NEXT_PUBLIC_API_BASE_URL;
 
   // * Define o prefixo base para todas as rotas da API
@@ -16,9 +17,11 @@ export function api(path: string, init?: RequestInit) {
       ? Object.fromEntries(init.headers.entries())
       : init?.headers || {};
 
+  const session = await auth();
+
   const headers = {
     ...existingHeaders,
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTAzMzE1ODIsImV4cCI6MTc1MDQxNzk4Miwic3ViIjoiOGFmNGVmMjMtYjBmMC00YzZlLTk3MDYtNTQwZWIxY2E1N2U2In0.i0Od2k1glR-1FBJnXTdY1NLxyRBxSE_HFJ0E1jB9Z04`,
+    Authorization: `Bearer ${session?.sessionToken}`,
     "Content-Type": "application/json",
   };
 
