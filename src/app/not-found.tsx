@@ -6,7 +6,7 @@ export default function NotFound() {
       <h2>Página não encontrada ( not found )</h2>
       <p>Could not find requested resource</p>
       <Link href={"/user/profile"} className="bg-blue-300 py-2 px-4">
-        Voltar
+        Voltar .
       </Link>
     </div>
   );
